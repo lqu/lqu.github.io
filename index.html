@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chatbot</title>
+    <title>Liang's AI Chatbot</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         /* General Page Styling */
         body {
@@ -88,6 +89,13 @@
         #send-button:hover {
             background-color: #0073e6;
         }
+
+        /* Styling for Links */
+        .message a {
+            color: #1e90ff;
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 <body>
@@ -148,7 +156,10 @@
             const chatContainer = document.getElementById("chat-container");
             const messageDiv = document.createElement("div");
             messageDiv.classList.add("message", sender);
-            messageDiv.textContent = text;
+            
+            // Use marked.js to convert Markdown to HTML safely
+            messageDiv.innerHTML = marked.parse(text);
+            
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight; // Auto-scroll to bottom
         }
