@@ -75,6 +75,21 @@
             color: #ffffff;
         }
 
+        .button {
+            background-color: #0a84ff; /* Match 'Send' button color */
+            color: white;
+            border: none;
+            padding: 8px 12px; /* Slimmer padding */
+            font-size: 14px; /* Slightly smaller font size */
+            border-radius: 20px; /* More rounded ends */
+            cursor: pointer;
+            margin: 5px; /* Space between buttons */
+        }
+
+        .button:hover {
+            background-color: #0073e6; /* Darker shade on hover */
+        }
+
         #send-button {
             padding: 10px 15px;
             margin-left: 10px;
@@ -105,6 +120,11 @@
         <h2>Welcome to Liang's AI Chatbot</h2>
         <p>Hi, I'm <strong>Liang Qu</strong>, a software engineer/manager. This chatbot is my virtual assistant to help people learn more about me.</p>
         <p>Feel free to ask anything! 🚀</p>
+        <button class="button" onclick="populateInput('Who is Liang?')">Who is Liang?</button>
+        <button class="button" onclick="populateInput('Show me some projects Liang has done, or sample code of his work.')">Show me some of his work</button>
+        <button class="button" onclick="populateInput('Show me some of his hobbies.')">Hobbies</button>
+        <button class="button" onclick="populateInput('Please tell me more about his pets.')">My pets</button>
+        <button class="button" onclick="populateInput('What would Liang suggest when browsing information from the Internet?')">My advice</button>
     </div>
 
     <div id="chat-container"></div>
@@ -123,6 +143,11 @@
         window.onload = function() {
             displayMessage("Hello! I'm an AI assistant built by Liang Qu. Ask me anything! 🚀", "bot");
         };
+
+        function populateInput(exampleText) {
+            document.getElementById('user-input').value = exampleText;
+            document.getElementById('send-button').click();
+        }
 
         async function sendMessage() {
             const inputField = document.getElementById("user-input");
