@@ -111,6 +111,20 @@
             text-decoration: underline;
         }
 
+        .thinking {
+            animation: thinkingAnimation 1.0s infinite alternate;
+            opacity: 0.3;
+        }
+
+        @keyframes thinkingAnimation {
+            from {
+                opacity: 0.3;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -158,7 +172,9 @@
             displayMessage(message, "user");
             inputField.value = ""; // Clear input field
 
-            // Send API request to AWS
+            // Show 'Thinking...' animation before response arrives
+            const thinkingMessage = displayMessage("Thinking...", "bot", true);
+
             try {
                 const response = await fetch(BACKEND_URL, {
                     method: "POST",
@@ -169,24 +185,37 @@
                 const data = await response.json();
                 session_id = data.session_id; // Store session ID for continuity
 
-                // Display AI response
+                // Remove 'Thinking...' and show real response
+                removeMessage(thinkingMessage);
                 displayMessage(data.response, "bot");
             } catch (error) {
+                removeMessage(thinkingMessage);
                 displayMessage("Error: Unable to connect to the chatbot.", "bot");
                 console.error("Chatbot Error:", error);
             }
         }
 
-        function displayMessage(text, sender) {
+        function displayMessage(text, sender, isTemporary = false) {
             const chatContainer = document.getElementById("chat-container");
             const messageDiv = document.createElement("div");
             messageDiv.classList.add("message", sender);
-            
-            // Use marked.js to convert Markdown to HTML safely
-            messageDiv.innerHTML = marked.parse(text);
-            
+
+            if (isTemporary) {
+                messageDiv.classList.add("thinking"); // Apply animation style
+            }
+
+            //messageDiv.textContent = text;
+            messageDiv.innerHTML = sender === "bot" ? marked.parse(text) : text;
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight; // Auto-scroll to bottom
+
+            return messageDiv; // Return reference for easy removal
+        }
+
+        function removeMessage(messageElement) {
+            if (messageElement) {
+                messageElement.remove();
+            }
         }
 
         function handleKeyPress(event) {
